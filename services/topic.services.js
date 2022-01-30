@@ -48,6 +48,10 @@ class TopicService {
       await db.connect();
       result = await db.query(`select * from DB_TOPICS where id=$1`, [id]);
 
+      if (!(result.rows.length > 0)) {
+        throw boom.notFound("Tópico no encontrado");
+      }
+
     } catch(err){
       throw new Error(err.message);
 
