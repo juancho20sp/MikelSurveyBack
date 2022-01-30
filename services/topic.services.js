@@ -1,5 +1,8 @@
 const boom = require('@hapi/boom');
-const client = require('../database/database');
+const {
+  dbClient,
+  Client
+} = require('../database/database');
 
 class TopicService {
   constructor() {
@@ -7,19 +10,23 @@ class TopicService {
   }
 
   async create(data) {
-    await client.connect();
-
+    const db = new Client(dbClient);
     let result;
 
     try {
+      await db.connect();
+
       const { title } = data;
 
-      result = await client.query(`insert into DB_TOPICS(Title) values($1, $2) RETURNING *`, [title], ["value 2"]);
+      result = await db.query(`insert into DB_TOPICS(Title) values($1) RETURNING *`, [title]);
+      await db.end();
+
     } catch(err){
       throw new Error(err.message);
-    }
 
-    client.end();
+    } finally {
+      await db.end();
+    }
 
     return result.rows;
   }
@@ -32,26 +39,41 @@ class TopicService {
 
   }
 
-  getTopic(id) {
-    console.log(`Getting topic with ID: ${id}`);
-
-    return 0;
-  }
-
-  async getAllTopics() {
-    await client.connect();
+  async getTopic(id) {
+    const db = new Client(dbClient);
 
     let result;
 
     try {
-      result = await client.query(`select * from DB_TOPICS`);
+      await db.connect();
+      result = await db.query(`select * from DB_TOPICS where id=$1`, [id]);
+
     } catch(err){
       throw new Error(err.message);
+
+    } finally {
+      await db.end();
     }
 
-    console.log(result.rows)
+    return result.rows
+  }
 
-    client.end();
+
+  async getAllTopics() {
+    const db = new Client(dbClient);
+
+    let result;
+
+    try {
+      await db.connect();
+      result = await db.query(`select * from DB_TOPICS`);
+
+    } catch(err){
+      throw new Error(err.message);
+
+    } finally {
+      await db.end();
+    }
 
     return result.rows
   }

@@ -38,15 +38,17 @@ router.get('/:id',
     }
 });
 
-router.post('/', (req, res) => {
-  const body = req.body;
+router.post('/',
+  validatorHandler(createTopicSchema, 'body'),
+  async(req, res, next) => {
+  try {
+    const body = req.body;
+    const topic = await service.create(body);
+    res.status(201).json(topic);
 
-  const survey = service.create(body);
-
-  res.json({
-    message: 'post working',
-    ...survey
-  })
+  } catch(err) {
+    next(err);
+  }
 })
 
 module.exports = router;

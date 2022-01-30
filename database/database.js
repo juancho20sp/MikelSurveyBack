@@ -2,34 +2,38 @@ const { Client } = require('pg');
 require('dotenv').config();
 
 // process.env.NOMBRE
-const client = new Client({
+const dbClient = {
   host: process.env.HOST,
   port: process.env.DB_PORT,
   user: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
   ssl: { rejectUnauthorized: false }
-});
+}
 
-client.on('connect', () => {
-  console.log('Database connection');
-})
+// client.on('connect', () => {
+//   console.log('Database connection');
+// })
 
-client.on('end', () => {
-  console.log(`
-  host: ${process.env.HOST},
-  port: ${process.env.DB_PORT},
-  user: ${process.env.USER},
-  password: ${process.env.PASSWORD},
-  database: ${process.env.DATABASE}
-  `)
+// client.on('end', () => {
+//   console.log(`
+//   host: ${process.env.HOST},
+//   port: ${process.env.DB_PORT},
+//   user: ${process.env.USER},
+//   password: ${process.env.PASSWORD},
+//   database: ${process.env.DATABASE}
+//   `)
 
-  console.log('Connection end');
-})
+//   console.log('Connection end');
+// })
+
+// client.connect();
 
 
-
-module.exports = client;
+module.exports = {
+  dbClient,
+  Client
+};
 
 
 // client.connect();
