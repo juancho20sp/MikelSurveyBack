@@ -18,6 +18,10 @@ class SurveyService {
     console.log('getting all surveys...');
 
   }
+
+  getAllRanks() {
+    console.log('get all ranks')
+  }
 }
 
 module.exports = SurveyService;
