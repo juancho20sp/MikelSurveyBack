@@ -13,39 +13,21 @@ class SurveyService {
   async create(data) {
     const db = new Client(dbClient);
     let survey;
-    let answerResponse;
+    let dataToStore = [];
 
     try {
       await db.connect();
 
-      answerResponse = [];
-
       const { date, rank, answers } = data;
 
-      // TODO LIST
-      // CREATE SURVEY
-      // ANSWERS:
-      //    REGISTER ANSWER
-      //        CONNECT WITH QUESTION
-      //            FOR EACH TOPIC:
-      //                CONNECT WITH TOPIC
-
       survey = await db.query(`insert into DB_SURVEY(Creation_date, Person_rank) values($1, $2) RETURNING *`, [date, rank]);
-      // survey = 0;
 
       const {id: surveyId} = survey.rows[0];
-
-      console.log('  ---  ')
-      console.log('Survey: ')
-      console.log(survey.rows)
-      console.log(surveyId)
-      console.log('  ---  ')
-
 
       answers.forEach((answer) => {
         const { questionId, topics } = answer;
 
-        topics.forEach(async (topic) => {
+        topics.forEach((topic) => {
           const { topicId, answerOptionId } = topic;
 
           const data = {
@@ -55,11 +37,7 @@ class SurveyService {
             answerOptionId
           }
 
-          const newAnswer = await this.answerService.createAnswer(data)
-          // answerResponse = [...answerResponse, newAnswer];
-          answerResponse.push(newAnswer)
-
-          console.log(answerResponse)
+          dataToStore = [...dataToStore, data];
         })
       });
 
@@ -70,18 +48,12 @@ class SurveyService {
       await db.end();
     }
 
-    function resolveAfter2Seconds() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve('resolved');
-        }, 500);
-      });
-    }
+    const answers = await Promise.all(dataToStore.map(data => this.answerService.createAnswer(data)));
 
     const response = {
       survey: [...survey.rows],
-      answers: answerResponse
-    };
+      answers
+    }
 
     return response;
   }
