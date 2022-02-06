@@ -4,7 +4,7 @@
 CREATE TABLE IF NOT EXISTS DB_SURVEY(
     Id                      SERIAL          PRIMARY KEY,
     Creation_date           DATE            NOT NULL,
-    Person_rank             VARCHAR(10)     NOT NULL
+    Person_rank             VARCHAR(50)     NOT NULL
 );
 
 -- -----------------------------------------------------

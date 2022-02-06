@@ -23,7 +23,7 @@ router.post('/',
   async(req, res, next) => {
   try {
     const body = req.body;
-    const answerOption = await service.create(body);
+    const answerOption = await service.createAnswerOption(body);
     res.status(201).json(answerOption);
 
   } catch(err) {

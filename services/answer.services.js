@@ -9,7 +9,33 @@ class AnswerService {
 
   }
 
-  async create(data) {
+  async createAnswer(data) {
+    const db = new Client(dbClient);
+    let result;
+
+    try {
+      await db.connect();
+
+      const {
+        surveyId,
+        questionId,
+        topicId,
+        answerOptionId
+      } = data;
+
+      result = await db.query(`insert into DB_ANSWER(Id_Answer_Option, Id_Topic, Id_Question, Id_Survey) values($1, $2, $3, $4) RETURNING *`, [answerOptionId, topicId, questionId, surveyId]);
+
+    } catch(err){
+      throw new Error(err.message);
+
+    } finally {
+      await db.end();
+    }
+
+    return result.rows[0];
+  }
+
+  async createAnswerOption(data) {
     const db = new Client(dbClient);
     let result;
 

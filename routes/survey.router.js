@@ -1,25 +1,39 @@
 const express = require('express');
 
 const SurveyService = require('../services/survey.services');
+const validatorHandler = require('../middlewares/validator.handler');
+
+const {
+  createSurveySchema,
+  updateSurveySchema,
+  getSurveySchema
+} = require('../schemas/survey.schema');
 
 const router = express.Router();
 const service = new SurveyService();
 
-router.get('/', (req, res) => {
-  res.json({
-    message: 'Everything working fine!'
-  })
+router.get('/', async (req, res, next) => {
+  try {
+    const surveys = await service.getAllSurveys();
+
+    res.json(surveys);
+
+  } catch(err){
+    next(err);
+  }
 });
 
-router.post('/', (req, res) => {
-  const body = req.body;
+router.post('/',
+  validatorHandler(createSurveySchema, 'body'),
+  async(req, res, next) => {
+  try {
+    const body = req.body;
+    const topic = await service.create(body);
+    res.status(201).json(topic);
 
-  const survey = service.create(body);
-
-  res.json({
-    message: 'post working',
-    ...survey
-  })
+  } catch(err) {
+    next(err);
+  }
 })
 
 module.exports = router;
