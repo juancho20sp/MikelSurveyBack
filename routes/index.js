@@ -13,7 +13,7 @@ function router(app) {
   // VERSION 1
   app.use('/api/v1', router);
   router.use('/survey', surveyRouter);
-  router.use('/question', questionRouter);
+  router.use('/questions', questionRouter);
   router.use('/topics', topicRouter);
   router.use('/answers', answerRouter);
 

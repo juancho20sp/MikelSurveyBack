@@ -19,7 +19,6 @@ class TopicService {
       const { title } = data;
 
       result = await db.query(`insert into DB_TOPICS(Title) values($1) RETURNING *`, [title]);
-      await db.end();
 
     } catch(err){
       throw new Error(err.message);

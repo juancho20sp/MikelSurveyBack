@@ -13,12 +13,14 @@ CREATE TABLE IF NOT EXISTS DB_SURVEY(
 CREATE TABLE IF NOT EXISTS DB_QUESTIONS(
     Id                          SERIAL              PRIMARY KEY,
     Text_Question               VARCHAR(300)        NOT NULL,
+    Is_Shared                   BOOLEAN             NOT NULL,
     CONSTRAINT UNQ_QUESTION UNIQUE (Text_Question)
 );
 
 -- -----------------------------------------------------
 -- Table `DB_TOPICS`
 -- -----------------------------------------------------
+-- TODO -> agregar artículo (el / la)
 CREATE TABLE IF NOT EXISTS DB_TOPICS(
     Id                  SERIAL              PRIMARY KEY,
     Title               VARCHAR(100)        NOT NULL,
