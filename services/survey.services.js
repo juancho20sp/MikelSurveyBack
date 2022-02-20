@@ -91,3 +91,9 @@ class SurveyService {
 }
 
 module.exports = SurveyService;
+
+
+// QUERIES
+// ANSWERS + RANK + DATE:
+// select * from db_answer da
+// join db_survey ds on da.id_survey = ds.id ;

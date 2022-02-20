@@ -44,7 +44,7 @@ class QuestionService {
 
     try {
       await db.connect();
-      result = await db.query(`select * from DB_QUESTIONS`);
+      result = await db.query(`select * from db_questions order by id`);
 
     } catch(err){
       throw new Error(err.message);

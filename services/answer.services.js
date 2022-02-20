@@ -63,7 +63,7 @@ class AnswerService {
 
     try {
       await db.connect();
-      result = await db.query(`select * from DB_ANSWER_OPTIONS`);
+      result = await db.query(`select * from DB_ANSWER_OPTIONS order by answer_value desc`);
 
     } catch(err){
       throw new Error(err.message);
