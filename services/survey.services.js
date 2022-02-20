@@ -79,14 +79,20 @@ class SurveyService {
   }
 
   getAllRanks() {
-    return {
-      status: 200,
-      data: [
-        'General',
-        'Coronel',
-        'Teniente Coronel'
-      ]
-    }
+    return [
+        {
+          id: 1,
+          text: 'General'
+        },
+        {
+          id: 2,
+          text: 'Coronel'
+        },
+        {
+          id: 3,
+          text: 'Teniente Coronel'
+        }
+    ]
   }
 }
 

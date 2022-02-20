@@ -36,4 +36,15 @@ router.post('/',
   }
 })
 
+router.get('/ranks', (req, res, next) => {
+  try {
+    const surveys = service.getAllRanks();
+
+    res.json(surveys);
+
+  } catch(err){
+    next(err);
+  }
+});
+
 module.exports = router;
