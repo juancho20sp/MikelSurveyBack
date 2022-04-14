@@ -2,6 +2,7 @@ const Joi = require('joi');
 
 const id = Joi.number();
 const date = Joi.date();
+// const date = Joi.string();
 const rank = Joi.string();
 const answers = Joi.array();
 

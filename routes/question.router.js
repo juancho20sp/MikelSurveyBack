@@ -29,9 +29,6 @@ router.post('/',
   try {
     const body = req.body;
 
-    // $
-    console.log(body)
-
     const topic = await service.create(body);
     res.status(201).json(topic);
 

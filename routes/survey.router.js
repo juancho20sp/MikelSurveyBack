@@ -28,6 +28,7 @@ router.post('/',
   async(req, res, next) => {
   try {
     const body = req.body;
+
     const topic = await service.create(body);
     res.status(201).json(topic);
 

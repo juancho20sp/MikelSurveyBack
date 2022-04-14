@@ -41,21 +41,21 @@ class SurveyService {
         })
       });
 
+      const dbAnswers = await Promise.all(dataToStore.map(data => this.answerService.createAnswer(data, db)));
+
+      const response = {
+        survey: [...survey.rows],
+        answers: dbAnswers
+      }
+
+      return response;
+
     } catch(err){
       throw new Error(err.message);
 
     } finally {
       await db.end();
     }
-
-    const answers = await Promise.all(dataToStore.map(data => this.answerService.createAnswer(data)));
-
-    const response = {
-      survey: [...survey.rows],
-      answers
-    }
-
-    return response;
   }
 
   async getAllSurveys() {

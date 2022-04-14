@@ -9,12 +9,12 @@ class AnswerService {
 
   }
 
-  async createAnswer(data) {
-    const db = new Client(dbClient);
+  async createAnswer(data, db) {
+    // const db = new Client(dbClient);
     let result;
 
     try {
-      await db.connect();
+      // await db.connect();
 
       const {
         surveyId,
@@ -29,7 +29,7 @@ class AnswerService {
       throw new Error(err.message);
 
     } finally {
-      await db.end();
+      // await db.end();
     }
 
     return result.rows[0];
