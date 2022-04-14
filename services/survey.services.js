@@ -62,10 +62,50 @@ class SurveyService {
     const db = new Client(dbClient);
 
     let result;
+    const reviewedSurveys = [];
+    const finalResult = [];
 
     try {
       await db.connect();
-      result = await db.query(`select * from DB_SURVEY`);
+      // result = await db.query(`select * from DB_SURVEY`);
+      result = await db.query(`select ds.creation_date, ds.id as survey_id, ds.person_rank, dq.id as ID_question, dq.factor, dt.title as topic, dao.text_answer as topic_answer from db_answer da
+      join db_survey ds on da.id_survey = ds.id
+      join db_answer_options dao on da.id_answer_option = dao.id
+      join db_questions dq on da.id_question = dq.id
+      join db_topics dt on da.id_topic = dt.id
+      group by (ds.id, dq.text_question, dt.title, dao.text_answer, dq.id)
+      order by ds.id, dq.id `);
+
+      let allSurveyIdx = result.rows.map(row => row.survey_id);
+      allSurveyIdx = [...new Set(allSurveyIdx)];
+
+
+      result.rows.forEach(survey => {
+        if (reviewedSurveys.includes(survey['survey_id'])){
+          return;
+        }
+
+        const userData = result.rows.filter((data) => data.survey_id === allSurveyIdx[0]);
+
+        const res = {};
+
+        res['creation_date'] = userData[0]['creation_date'];
+        res['survey_id'] = userData[0]['survey_id'];
+        res['person_rank'] = userData[0]['person_rank'];
+
+        userData.forEach((line) => {
+          res[`${line.factor}-${line.topic}`] = line[`topic_answer`];
+        });
+
+
+        finalResult.push(res);
+
+        reviewedSurveys.push(survey['survey_id']);
+
+        if (allSurveyIdx.length > 0){
+          allSurveyIdx.splice(0, 1);
+        }
+      });
 
     } catch(err){
       throw new Error(err.message);
@@ -74,7 +114,8 @@ class SurveyService {
       await db.end();
     }
 
-    return result.rows
+    // return result.rows
+    return finalResult;
 
   }
 
