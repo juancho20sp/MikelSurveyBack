@@ -67,7 +67,7 @@ class SurveyService {
 
     try {
       await db.connect();
-      // result = await db.query(`select * from DB_SURVEY`);
+
       result = await db.query(`select ds.creation_date, ds.id as survey_id, ds.person_rank, dq.id as ID_question, dq.factor, dt.title as topic, dao.text_answer as topic_answer from db_answer da
       join db_survey ds on da.id_survey = ds.id
       join db_answer_options dao on da.id_answer_option = dao.id
@@ -114,7 +114,6 @@ class SurveyService {
       await db.end();
     }
 
-    // return result.rows
     return finalResult;
 
   }
