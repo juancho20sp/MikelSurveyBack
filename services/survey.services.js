@@ -73,6 +73,7 @@ class SurveyService {
       join db_answer_options dao on da.id_answer_option = dao.id
       join db_questions dq on da.id_question = dq.id
       join db_topics dt on da.id_topic = dt.id
+      where ds.creation_date >= '2022-08-01'
       group by (ds.id, dq.text_question, dt.title, dao.text_answer, dq.id)
       order by ds.id, dq.id `);
 
